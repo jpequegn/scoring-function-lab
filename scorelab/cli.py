@@ -14,6 +14,7 @@ from scorelab.renderer import render_comparison, render_iteration, render_loop_r
 from scorelab.runner import ExperimentRunner
 from scorelab.scorer import BaseScorer
 from scorelab.task import Task, TaskType
+from scorers.adaptive import AdaptiveScorer
 from scorers.composite import CompositeScorer
 from scorers.llm_graded import LLMGradedScorer
 from scorers.rule_based import RuleBasedScorer
@@ -70,6 +71,7 @@ def _get_scorer(name: str) -> BaseScorer:
         "test_runner": TestRunnerScorer(),
         "semantic": SemanticScorer(),
         "composite": CompositeScorer([(RuleBasedScorer(), 0.6), (SemanticScorer(), 0.4)]),
+        "adaptive": AdaptiveScorer([RuleBasedScorer(), SemanticScorer(), LLMGradedScorer()]),
     }
     if name not in scorers:
         raise click.BadParameter(f"Unknown scorer: {name}. Available: {', '.join(scorers)}")
@@ -77,7 +79,7 @@ def _get_scorer(name: str) -> BaseScorer:
 
 
 def _get_all_scorers() -> list[BaseScorer]:
-    return [_get_scorer(name) for name in ["rule_based", "llm_graded", "semantic", "composite"]]
+    return [_get_scorer(name) for name in ["rule_based", "llm_graded", "semantic", "composite", "adaptive"]]
 
 
 def _dummy_agent(prompt: str, iteration: int, prev: str | None) -> tuple[str, int]:
@@ -90,7 +92,7 @@ def _dummy_agent(prompt: str, iteration: int, prev: str | None) -> tuple[str, in
 # --- CLI ---
 
 TASK_NAMES = list(SAMPLE_TASKS.keys())
-SCORER_NAMES = ["rule_based", "llm_graded", "test_runner", "semantic", "composite"]
+SCORER_NAMES = ["rule_based", "llm_graded", "test_runner", "semantic", "composite", "adaptive"]
 
 
 @click.group()
