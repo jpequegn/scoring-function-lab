@@ -46,10 +46,10 @@ class TestCLIMatrix:
 
 
 class TestCLITaxonomy:
-    def test_taxonomy_no_file(self):
+    def test_taxonomy_prints_content(self):
         result = runner.invoke(cli, ["taxonomy"])
         assert result.exit_code == 0
-        assert "not found" in result.output or "SCORING_TAXONOMY" in result.output
+        assert "Scoring Function Taxonomy" in result.output or "not found" in result.output
 
 
 class TestCLIHistory:
