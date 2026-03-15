@@ -1,0 +1,12 @@
+[project]
+name = "scorelab"
+version = "0.1.0"
+description = "A testbed for designing, testing, and comparing agent scoring functions"
+requires-python = ">=3.11"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.backends"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
